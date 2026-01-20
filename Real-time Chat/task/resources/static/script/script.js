@@ -1,11 +1,17 @@
 let stompClient = null;
+let currentUsername = null;
 
-const loginPage = document.getElementById('loginPanel');
+const loginPage = document.getElementById('loginOverlay');
 const messagePage = document.getElementById('container');
 const usernameInput = document.getElementById('input-username');
 const usernameForm = document.getElementById('userForm');
 
+messagePage.classList.add('blurred');
+
 function connect(event) {
+    event.preventDefault();
+    document.getElementById('send-username-btn').disabled = true;
+
     let socket = new SockJS('http://'+ document.location.host +'/ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, onConnected, onError);
@@ -13,22 +19,44 @@ function connect(event) {
 }
 
 function onConnected() {
-    let usernameObj = {
-        username: usernameInput.value.trim()
-    };
+    currentUsername = usernameInput.value.trim();
+    stompClient.subscribe('/topic/public', payload => {
+        addMessage(JSON.parse(payload.body));
+    });
+    stompClient.subscribe('/topic/users', payload => {
+        renderUsers(JSON.parse(payload.body));
+    });
+
     stompClient.send(
         '/app/chat.registerUser',
         {},
-        JSON.stringify(usernameObj)
+        JSON.stringify({username: currentUsername})
     );
-    loginPage.classList.toggle('hidden');
-    messagePage.classList.toggle('hidden');
-    stompClient.subscribe('/topic/public', onMessageReceived);
+
+    loginOverlay.classList.add('hidden');
+    messagePage.classList.remove('blurred');
+
     getMessages();
 }
-function onMessageReceived(payload) {
-    console.log(payload);
-    addMessage(JSON.parse(payload.body));
+
+function renderUsers(users){
+  const usersDiv = document.getElementById('users');
+  usersDiv.innerHTML = '';
+
+  const seen = new Set();
+  users.forEach(u => {
+    const name = u.username ?? u;
+
+    if (!name || seen.has(name)) return;
+    seen.add(name);
+
+    if (currentUsername && name === currentUsername) return;
+
+    const el = document.createElement('div');
+    el.className = 'user';
+    el.textContent = name;
+    usersDiv.appendChild(el);
+  });
 }
 
 function onError(event) {
@@ -53,30 +81,57 @@ function sendMessage(event) {
 }
 
 function addMessage(messageObj) {
-    if (messageObj.content.length > 0){
-        const newNode = document.createElement("div");
-        newNode.classList.add("message-container");
-        const messageDataNode = document.createElement("div");
-        messageDataNode.classList.add("message-data");
-        let spanUser = document.createElement("span");
-        spanUser.classList.add("sender");
-        spanUser.textContent = messageObj.user;
-        let spanTime = document.createElement("span");
-        spanTime.classList.add("date");
-        spanTime.textContent = messageObj.timestamp;
-        messageDataNode.append(spanUser, spanTime)
-        const spanMessageValue = document.createElement("span");
-        spanMessageValue.classList.add("message");
-        spanMessageValue.textContent = messageObj.content;
-        newNode.append(messageDataNode, spanMessageValue);
-        let messageContainer = document.getElementById("messages");
-        if (document.querySelector(".message") != null) {
-            messageContainer.insertAdjacentHTML("beforeend", "<hr>");
-        }
-        messageContainer.appendChild(newNode);
-        newNode.scrollIntoView({ block: 'end',  behavior: 'smooth' });
+    if (!messageObj) return;
+
+    // Handle JOIN/LEAVE system events
+    const type = (messageObj.type || "").toLowerCase();
+    if (type === "leave" || type === "join") {
+        const sys = document.createElement("div");
+        sys.className = "message-container";
+        sys.innerHTML = `<div class="message-data">
+        <span class="sender">System</span>
+        <span class="date">${messageObj.timestamp ?? ""}</span>
+        </div>
+        <span class="message">${messageObj.username ?? "Someone"} ${type === "join" ? "joined" : "left"}</span>`;
+        document.getElementById("messages").appendChild(sys);
+        sys.scrollIntoView({ block: "end", behavior: "smooth" });
+        return;
     }
+
+    // Normal chat message
+    const content = (messageObj.content ?? "").trim();
+    if (!content) return;
+
+    const newNode = document.createElement("div");
+    newNode.classList.add("message-container");
+
+    const messageDataNode = document.createElement("div");
+    messageDataNode.classList.add("message-data");
+
+    const spanUser = document.createElement("span");
+    spanUser.classList.add("sender");
+    spanUser.textContent = messageObj.username ?? messageObj.user ?? "Unknown";
+
+    const spanTime = document.createElement("span");
+    spanTime.classList.add("date");
+    spanTime.textContent = messageObj.timestamp ?? "";
+
+    messageDataNode.append(spanUser, spanTime);
+
+    const spanMessageValue = document.createElement("span");
+    spanMessageValue.classList.add("message");
+    spanMessageValue.textContent = content;
+
+    newNode.append(messageDataNode, spanMessageValue);
+
+    const messageContainer = document.getElementById("messages");
+    if (document.querySelector(".message") != null) {
+        messageContainer.insertAdjacentHTML("beforeend", "<hr>");
+    }
+    messageContainer.appendChild(newNode);
+    newNode.scrollIntoView({ block: "end", behavior: "smooth" });
 }
+
 
 function getMessages() {
     fetch("/messages")
@@ -88,6 +143,8 @@ function getMessages() {
         })
         .catch(error => console.log(error));
 }
+
+
 
 const setup = () => {
     usernameForm.addEventListener('submit', connect, true);

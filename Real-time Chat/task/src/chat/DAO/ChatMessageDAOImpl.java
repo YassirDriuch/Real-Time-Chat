@@ -1,17 +1,17 @@
-package chat.Message;
+package chat.DAO;
 
+import chat.Model.ChatMessage;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class ChatMessageDAOImpl implements ChatMessageDAO{
 
     private int id = 0;
 
-    private List<ChatMessage> messages = new ArrayList<>();
+    private final List<ChatMessage> messages = new ArrayList<>();
 
     @Override
     public ChatMessage getMessage(int id) {

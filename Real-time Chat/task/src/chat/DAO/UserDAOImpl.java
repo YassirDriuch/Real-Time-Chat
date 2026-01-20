@@ -1,29 +1,28 @@
-package chat.User;
+package chat.DAO;
 
-import chat.User.User;
+import chat.Model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 
 public class UserDAOImpl implements UserDAO{
     private Long id = 0L;
 
-    private List<User> users = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
     @Override
     public User getUser(Long id) {
-        return users.stream().filter(user -> user.getId() == id).toList().get(0);
+        return users.stream().filter(user -> user.getId().equals(id)).toList().getFirst();
     }
 
     @Override
-    public Long saveUser(User user) {
+    public User saveUser(User user) {
         user.setId(id++);
         users.add(user);
-        return user.getId();
+        return user;
     }
 
     @Override

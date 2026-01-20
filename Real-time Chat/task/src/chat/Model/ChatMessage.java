@@ -1,4 +1,4 @@
-package chat.Message;
+package chat.Model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
-package chat.Message;
+package chat.DAO;
 
-import org.springframework.stereotype.Repository;
+import chat.Model.ChatMessage;
 
 import java.util.List;
 
