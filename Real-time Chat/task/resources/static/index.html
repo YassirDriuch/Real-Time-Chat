@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Chat</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/stylesheet.css">
+    </head>
+    <body>
+
+            <div id="container" class="hidden">
+                <div id="user-area">
+                    <div id="users"></div>
+                    <button id="public-chat-btn" type="button">Public</button>
+                </div>
+                <div id="chat-area">
+                    <div id="chat-header">
+                        <div id="chat-with">Public chat</div>
+                    </div>
+                    <div id="messages"></div>
+                    <div id="input-chat">
+                            <input type="text" id="input-msg" placeholder="Type a message" autofocus/>
+                            <button id="send-msg-btn"><img src="https://icons.getbootstrap.com/assets/icons/send.svg" /></button>
+                    </div>
+                </div>
+            </div>
+            <div id="loginOverlay">
+                <div id="loginPanel">
+                    <h2>Login</h2>
+                    <span>Please enter a username!</span>
+                    <form id="userForm">
+                        <label for="input-username">Username</label>
+                        <input type="text" id="input-username" required>
+                        <button id="send-username-btn" type="submit">Connect</button>
+                    </form>
+                </div>
+            </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script src="script/script.js"></script>
+    </body>
+</html>

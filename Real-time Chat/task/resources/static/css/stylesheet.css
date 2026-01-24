@@ -1,0 +1,256 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+
+#container {
+    height: 100vh;
+    color: #3E4043;
+    display: grid;
+    grid-template-columns: 20vw 1fr;
+}
+
+#container.blurred {
+  filter: blur(6px);
+  transform: scale(1.01);
+  pointer-events: none;
+  user-select: none;
+  display:none;
+}
+
+#loginPanel {
+    max-width: 400px;
+    width: min(400px, 92vw);
+    padding: 40px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+#loginPanel h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#loginPanel label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+#loginPanel input {
+    width: 100%;
+    padding: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#loginPanel button {
+    padding: 12px;
+    border: none;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#loginOverlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.45);
+  z-index: 9999;
+}
+
+#loginOverlay.hidden {
+  display: none;
+}
+
+#user-area {
+    grid-column: 1;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 52px 1fr 7.5vh;
+
+}
+
+#users {
+    grid-row: 1;
+    height: 92.5vh;
+    border-right: 1px solid #ccc;
+    background: #fff;
+    padding-top: 20px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.user-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 14px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.user-container:has(.user.active){
+    background: #1f7afc;
+}
+
+.user-container:hover{
+    background: #f2f4f8;
+}
+
+.user{
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    color: #5f6167;
+    font-size: 1.05rem;
+    font-weight: 500;
+    background: transparent;
+}
+
+.user.active{
+    color: white;
+    font-weight: 700;
+}
+
+.user:hover{
+    background: #f2f2f2;
+}
+
+.user:focus{
+    outline: 2px solid #b9d5ff;
+}
+
+.new-message-counter{
+    min-width: 22px;
+    height: 20px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: #ff3b30;
+    color: #fff;
+
+    font-size: 0.75rem;
+    font-weight: 800;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.new-message-counter.hidden{
+    display: none;
+}
+
+#public-chat-btn {
+    height: 100%;
+    grid-row: 3;
+    display: flex;
+    background: #ffffff;
+    color: #5f6167;
+    border: none;
+    border-top: 1px solid #e6e6e6;
+    font-size: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+#public-chat-btn.active{
+    background: #1f7afc;
+    color: #ffffff;
+    border-top-color: #1f7afc;
+}
+
+#chat-area {
+  grid-column: 2;
+  grid-row: 1;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 52px 1fr 7.5vh;
+}
+
+#chat-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-bottom: 1px solid #ddd;
+  background: #fff;
+}
+
+#chat-with {
+    font-weight: 700;
+}
+
+#messages {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-container {
+    text-align: left;
+    right: 0;
+    font-size: 1.5rem;
+    padding: 1em 2em;
+}
+
+.message-data {
+    font-size: 1rem;
+    color: #5f6167;
+}
+
+.date {
+    float: inline-end;
+}
+
+hr {
+    width: 95%;
+    border-top: 1px solid #bbb;
+    border-radius: 0.4px;
+    clear: right;
+}
+
+#input-chat {
+    height: 100%;
+    display: flex;
+}
+
+#input-chat input {
+    flex: 15 1 auto;
+    font-size: 1.25rem;
+    border: none;
+    background-color: #e7e7e7;
+    padding: 1em 2em;
+}
+
+#input-chat button {
+    flex: 1 1 auto;
+    border: none;
+    background-color: #1f7afc;
+    cursor: pointer;
+}
+
+#send-msg-btn img {
+  width: 18px;
+  height: 18px;
+  filter: invert(1);
+}
+
+.hidden {
+    display: none;
+}
+
+

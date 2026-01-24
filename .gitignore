@@ -1,3 +1,4 @@
 # Project exclude paths
 /.gradle/
 /build/
+/Real-time Chat/task/test/
