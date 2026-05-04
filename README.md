@@ -1,4 +1,4 @@
-# chat-service
+# Real-Time Chat
 
 Een real-time chatapplicatie gebouwd met WebSocket en STOMP. Gebruikers kunnen zich aanmelden, openbare berichten sturen en privebeberichten uitwisselen. Verbindingen worden beheerd via STOMP over SockJS.
 
